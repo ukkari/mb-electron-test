@@ -9,7 +9,7 @@ requirejs.config({
     paths: {
         "sugar-web": ".",
         "mustache": "lib/mustache",
-        "text": "lib/text",
+   //     "text": "lib/text",
         "webL10n": "lib/webL10n"
     },
 

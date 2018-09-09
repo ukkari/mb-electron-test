@@ -1,81 +1,133 @@
 'use strict';
 
-// Electronのモジュール
 const electron = require("electron");
 var nodeStatic = require('node-static');
+const path = require('path')
+const { app, globalShortcut, Menu } = require("electron");
 
 var file = new nodeStatic.Server(__dirname + '/mb');
 
-require('http').createServer(function (request, response) {
+const template = [
+  {
+    label: 'Edit',
+    submenu: [
+      {role: 'undo'},
+      {role: 'redo'},
+      {type: 'separator'},
+      {role: 'cut'},
+      {role: 'copy'},
+      {role: 'paste'},
+      {role: 'pasteandmatchstyle'},
+      {role: 'delete'},
+      {role: 'selectall'}
+    ]
+  },
+  {
+    label: 'View',
+    submenu: [
+      {role: 'reload'},
+      {role: 'forcereload'},
+      {role: 'toggledevtools'},
+      {type: 'separator'},
+      {role: 'resetzoom'},
+      {role: 'zoomin'},
+      {role: 'zoomout'},
+      {type: 'separator'},
+      {role: 'togglefullscreen'}
+    ]
+  },
+  {
+    role: 'window',
+    submenu: [
+      {role: 'minimize'},
+      {role: 'close'}
+    ]
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click () { require('electron').shell.openExternal('https://electronjs.org') }
+      }
+    ]
+  }
+]
+
+if (process.platform === 'darwin') {
+  template.unshift({
+    label: app.getName(),
+    submenu: [
+      {role: 'about'},
+      {type: 'separator'},
+      {role: 'services', submenu: []},
+      {type: 'separator'},
+      {role: 'hide'},
+      {role: 'hideothers'},
+      {role: 'unhide'},
+      {type: 'separator'},
+      {role: 'quit'}
+    ]
+  })
+
+  // Edit menu
+  template[1].submenu.push(
+    {type: 'separator'},
+    {
+      label: 'Speech',
+      submenu: [
+        {role: 'startspeaking'},
+        {role: 'stopspeaking'}
+      ]
+    }
+  )
+
+  // Window menu
+  template[3].submenu = [
+    {role: 'close'},
+    {role: 'minimize'},
+    {role: 'zoom'},
+    {type: 'separator'},
+    {role: 'front'}
+  ]
+}
+
+var server = require('http').createServer(function (request, response) {
   request.addListener('end', function () {
     file.serve(request, response);
   }).resume();
-}).listen(7171);//ポートは空いていそうなところで
+}).listen(7202);
 
-// アプリケーションをコントロールするモジュール
-const app = electron.app;
-
-// ウィンドウを作成するモジュール
 const BrowserWindow = electron.BrowserWindow;
-
-// メインウィンドウはGCされないようにグローバル宣言
 let mainWindow;
 
-// 全てのウィンドウが閉じたら終了
 app.on('window-all-closed', function () {
   if (process.platform != 'darwin') {
     app.quit();
   }
 });
 
-// Electronの初期化完了後に実行
 app.on('ready', function () {
-  // メイン画面の表示。ウィンドウの幅、高さを指定できる
   mainWindow = new BrowserWindow({
     width: 800, height: 600,
     webPreferences: {
-      //nodeIntegration: false
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.js')
     }
   });
-  mainWindow.loadURL('http://localhost:7171/index.html');
-  mainWindow.webContents.openDevTools()
+  mainWindow.loadURL('http://localhost:7202/index.html');
+  //mainWindow.webContents.openDevTools()
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 
-  // ウィンドウが閉じられたらアプリも終了
   mainWindow.on('closed', function () {
     mainWindow = null;
+    server.close()
+  });
+
+    // Register a 'CommandOrControl+Y' shortcut listener.
+  globalShortcut.register('CommandOrControl+Y', () => {
+    // Do stuff when Y and either Command/Control is pressed.
+    console.log("pressed!")
   });
 });
-/*
-"use strict";
-
-const electron = require("electron");
-var nodeStatic = require('node-static');
-var file = new nodeStatic.Server(__dirname + '/html');
-
-require('http').createServer(function (request, response) {
-  request.addListener('end', function () {
-    file.serve(request, response);
-  }).resume();
-}).listen(7170);//ポートは空いていそうなところで。
-
-var app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-var mainWindow = null;
-
-app.on('window-all-closed', () => app.quit());
-app.on('ready', () => {
-  mainWindow = new BrowserWindow({
-    width: 480,
-    height: 600,
-    resizable: false,
-    alwaysOnTop: true,
-    movable: false
-  });
-
-  //ローカルで立てたサーバーにアクセス
-  mainWindow.loadURL('http://localhost:7170/index.html');
-
-  // ウィンドウが閉じられたらアプリも終了
-  mainWindow.on('closed', () => mainWindow = null);
-
-});*/

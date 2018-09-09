@@ -213,7 +213,7 @@ var urlsToCache = [
     'lib/preloadjs.min.js',    
     'lib/require.js',
     'lib/reqwest.js',
-    'lib/text.js',
+    //'lib/text.js',
     'lib/Tone.min.js',
     'lib/tweenjs.min.js',
     'lib/voices/en/en.json',
