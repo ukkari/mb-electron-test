@@ -9,7 +9,7 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder -mwl"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/ukkari/mb-electron-test",
   "keywords": [
     "Electron",
     "quick",
