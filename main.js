@@ -5,11 +5,12 @@ var nodeStatic = require('node-static');
 const path = require('path')
 const { app, globalShortcut, Menu } = require("electron");
 
-var file = new nodeStatic.Server(__dirname + '/mb');
+
+var file = new nodeStatic.Server(__dirname + '/musicblocks');
 
 const template = [
   {
-    label: 'Edit',
+    label: '編集',
     submenu: [
       {role: 'undo'},
       {role: 'redo'},
@@ -23,7 +24,7 @@ const template = [
     ]
   },
   {
-    label: 'View',
+    label: '表示',
     submenu: [
       {role: 'reload'},
       {role: 'forcereload'},
@@ -96,7 +97,7 @@ var server = require('http').createServer(function (request, response) {
   request.addListener('end', function () {
     file.serve(request, response);
   }).resume();
-}).listen(7202);
+}).listen(7205);
 
 const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
@@ -115,10 +116,12 @@ app.on('ready', function () {
       preload: path.join(__dirname, 'preload.js')
     }
   });
-  mainWindow.loadURL('http://localhost:7202/index.html');
+  mainWindow.setMenu(null)
+  mainWindow.loadURL('http://localhost:7205/index.html');
   //mainWindow.webContents.openDevTools()
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  //const menu = Menu.buildFromTemplate(template)
+  //Menu.setApplicationMenu(menu)
+  mainWindow.maximize()
 
   mainWindow.on('closed', function () {
     mainWindow = null;
