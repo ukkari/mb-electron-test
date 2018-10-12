@@ -3,101 +3,48 @@
 const electron = require("electron");
 var nodeStatic = require('node-static');
 const path = require('path')
-const { app, globalShortcut, Menu } = require("electron");
-
+const { app, globalShortcut, Menu, ipcMain} = require("electron");
 
 var file = new nodeStatic.Server(__dirname + '/musicblocks');
 
 const template = [
   {
-    label: '編集',
-    submenu: [
-      {role: 'undo'},
-      {role: 'redo'},
-      {type: 'separator'},
-      {role: 'cut'},
-      {role: 'copy'},
-      {role: 'paste'},
-      {role: 'pasteandmatchstyle'},
-      {role: 'delete'},
-      {role: 'selectall'}
-    ]
-  },
-  {
     label: '表示',
     submenu: [
-      {role: 'reload'},
-      {role: 'forcereload'},
-      {role: 'toggledevtools'},
+      {role: 'reload', label:"リロード"},
+      {role: 'forcereload', label:"強制リロード"},
+      {role: 'toggledevtools', label:"開発者ツールを表示"},
       {type: 'separator'},
-      {role: 'resetzoom'},
-      {role: 'zoomin'},
-      {role: 'zoomout'},
+      {role: 'resetzoom', label:"等倍にする"},
+      {role: 'zoomin', label:"拡大する"},
+      {role: 'zoomout', label:"縮小する"},
       {type: 'separator'},
-      {role: 'togglefullscreen'}
+      {role: 'togglefullscreen', label:"フルスクリーンの有効化/無効化"}
     ]
   },
   {
-    role: 'window',
+    role: 'window', label:"ウィンドウ",
     submenu: [
-      {role: 'minimize'},
-      {role: 'close'}
+      {role: 'minimize', label:"最小化"},
+      {role: 'close', label:"閉じる"}
     ]
   },
   {
-    role: 'help',
+    role: 'help', label:"ヘルプ",
     submenu: [
       {
-        label: 'Learn More',
-        click () { require('electron').shell.openExternal('https://electronjs.org') }
+        label: 'ホームページを開く',
+        click () { require('electron').shell.openExternal('https://musicblocks.net/') }
       }
     ]
   }
 ]
 
-if (process.platform === 'darwin') {
-  template.unshift({
-    label: app.getName(),
-    submenu: [
-      {role: 'about'},
-      {type: 'separator'},
-      {role: 'services', submenu: []},
-      {type: 'separator'},
-      {role: 'hide'},
-      {role: 'hideothers'},
-      {role: 'unhide'},
-      {type: 'separator'},
-      {role: 'quit'}
-    ]
-  })
-
-  // Edit menu
-  template[1].submenu.push(
-    {type: 'separator'},
-    {
-      label: 'Speech',
-      submenu: [
-        {role: 'startspeaking'},
-        {role: 'stopspeaking'}
-      ]
-    }
-  )
-
-  // Window menu
-  template[3].submenu = [
-    {role: 'close'},
-    {role: 'minimize'},
-    {role: 'zoom'},
-    {type: 'separator'},
-    {role: 'front'}
-  ]
-}
-
 var server = require('http').createServer(function (request, response) {
   request.addListener('end', function () {
     file.serve(request, response);
   }).resume();
-}).listen(7205);
+}).listen(7211);
 
 const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
@@ -110,18 +57,21 @@ app.on('window-all-closed', function () {
 
 app.on('ready', function () {
   mainWindow = new BrowserWindow({
-    width: 800, height: 600,
+    title: "MusicBlocks",
+    show: false,
     webPreferences: {
       nodeIntegration: false,
       preload: path.join(__dirname, 'preload.js')
     }
   });
   mainWindow.setMenu(null)
-  mainWindow.loadURL('http://localhost:7205/index.html');
+  mainWindow.loadURL('http://localhost:7211/index.html');
   //mainWindow.webContents.openDevTools()
-  //const menu = Menu.buildFromTemplate(template)
-  //Menu.setApplicationMenu(menu)
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
   mainWindow.maximize()
+  mainWindow.setResizable(true)
+  mainWindow.show()
 
   mainWindow.on('closed', function () {
     mainWindow = null;
