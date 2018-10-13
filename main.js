@@ -44,7 +44,7 @@ var server = require('http').createServer(function (request, response) {
   request.addListener('end', function () {
     file.serve(request, response);
   }).resume();
-}).listen(7211);
+}).listen(7213);
 
 const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
@@ -57,7 +57,7 @@ app.on('window-all-closed', function () {
 
 app.on('ready', function () {
   mainWindow = new BrowserWindow({
-    title: "MusicBlocks",
+    title: "ミュージックブロックス オフラインバージョン",
     show: false,
     webPreferences: {
       nodeIntegration: false,
@@ -65,7 +65,7 @@ app.on('ready', function () {
     }
   });
   mainWindow.setMenu(null)
-  mainWindow.loadURL('http://localhost:7211/index.html');
+  mainWindow.loadURL('http://localhost:7213/index.html');
   //mainWindow.webContents.openDevTools()
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
@@ -76,6 +76,10 @@ app.on('ready', function () {
   mainWindow.on('closed', function () {
     mainWindow = null;
     server.close()
+  });
+
+  mainWindow.on('page-title-updated', (evt) => {
+    evt.preventDefault();
   });
 
     // Register a 'CommandOrControl+Y' shortcut listener.
