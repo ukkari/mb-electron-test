@@ -417,6 +417,12 @@ dmg-builder@5.3.1:
     parse-color "^1.0.0"
     sanitize-filename "^1.6.1"
 
+doc-ready@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/doc-ready/-/doc-ready-1.0.4.tgz#37f5391969cff994303fdfef2e5d50357f8164d3"
+  dependencies:
+    eventie "^1"
+
 dot-prop@^4.1.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.2.0.tgz#1f19e0c2e1aa0e32797c49799f2837ac6af69c57"
@@ -489,6 +495,12 @@ electron-osx-sign@0.4.10:
     minimist "^1.2.0"
     plist "^2.1.0"
 
+electron-prompt@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/electron-prompt/-/electron-prompt-1.2.0.tgz#e1d330ca8791a28799194066d1217bb8d9a062db"
+  dependencies:
+    doc-ready "^1.0.4"
+
 electron-publish@20.28.3:
   version "20.28.3"
   resolved "https://registry.yarnpkg.com/electron-publish/-/electron-publish-20.28.3.tgz#0cc360ecaffd16e22780ee1630e0bd88fe6395e2"
@@ -501,9 +513,9 @@ electron-publish@20.28.3:
     lazy-val "^1.0.3"
     mime "^2.3.1"
 
-electron@^2.0.0:
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-2.0.8.tgz#6ec7113b356e09cc9899797e0d41ebff8163e962"
+electron@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-2.0.11.tgz#8e352a83ec607471e82d323a2adc7e7b53698e79"
   dependencies:
     "@types/node" "^8.0.24"
     electron-download "^3.0.1"
@@ -526,6 +538,10 @@ escape-string-regexp@^1.0.5:
 esprima@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
+
+eventie@^1:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/eventie/-/eventie-1.0.6.tgz#d4ffc8b0c2b5e493c2aa1b22cbe918d3aee74437"
 
 execa@^0.10.0:
   version "0.10.0"
@@ -1072,9 +1088,9 @@ nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
 
-node-static@^0.7.10:
-  version "0.7.10"
-  resolved "https://registry.yarnpkg.com/node-static/-/node-static-0.7.10.tgz#a1ddb72027c7f67179fb33487807b57e8bc7d2e7"
+node-static@^0.7.11:
+  version "0.7.11"
+  resolved "https://registry.yarnpkg.com/node-static/-/node-static-0.7.11.tgz#60120d349f3cef533e4e820670057eb631882e7f"
   dependencies:
     colors ">=0.6.0"
     mime "^1.2.9"
