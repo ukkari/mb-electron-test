@@ -6,6 +6,7 @@ const path = require('path')
 const { app, globalShortcut, Menu, ipcMain} = require("electron");
 
 var file = new nodeStatic.Server(__dirname + '/musicblocks');
+var port = 0;
 
 const template = [
   {
@@ -44,7 +45,7 @@ var server = require('http').createServer(function (request, response) {
   request.addListener('end', function () {
     file.serve(request, response);
   }).resume();
-}).listen(7213);
+}).listen(port);
 
 const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
@@ -65,7 +66,7 @@ app.on('ready', function () {
     }
   });
   mainWindow.setMenu(null)
-  mainWindow.loadURL('http://localhost:7213/index.html');
+  mainWindow.loadURL('http://localhost:' + server.address().port + '/index.html');
   //mainWindow.webContents.openDevTools()
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
