@@ -20,8 +20,8 @@
   "author": "MusicBlocks",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^2.0.14",
-    "electron-builder": "^20.38.3"
+    "electron": "^4.0.1",
+    "electron-builder": "^20.38.4"
   },
   "dependencies": {
     "electron-prompt": "^1.2.0",
