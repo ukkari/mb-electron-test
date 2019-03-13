@@ -1,3 +1,4 @@
 [submodule "musicblocks"]
 	path = musicblocks
 	url = https://github.com/sugarlabs/musicblocks
+	branch = master
